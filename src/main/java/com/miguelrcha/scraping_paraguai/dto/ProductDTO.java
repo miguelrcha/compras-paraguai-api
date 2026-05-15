@@ -1,13 +1,16 @@
 package com.miguelrcha.scraping_paraguai.dto;
 
 import lombok.Builder;
+import lombok.Data;
 
+@Data
 @Builder
-public record ProductDTO(
-        String name,
-        Double price,
-        String currency,
-        String store,
-        Boolean stock
-) {
+public class ProductDTO {
+
+    private String name;
+    private Double priceUsd;
+    private Double priceBrl;
+    private String currency;
+    private String store;
+    private Boolean stock;
 }

@@ -40,15 +40,19 @@ public class CellshopScraper implements ProductScraper {
                         ".promocao-item-nome a"
                 ).text();
 
-                String price = item.select(
+                String usdPrice = item.select(
                         ".price-model span"
+                ).text();
+
+                String brlPrice = item.select(
+                        ".promocao-item-preco-text"
                 ).text();
 
                 products.add(
                         ProductDTO.builder()
                                 .name(name)
-                                .price(parsePrice(price))
-                                .currency("USD")
+                                .priceUsd(parsePrice(usdPrice))
+                                .priceBrl(parsePrice(brlPrice))
                                 .store("Compras Paraguai")
                                 .stock(true)
                                 .build()
@@ -66,13 +70,21 @@ public class CellshopScraper implements ProductScraper {
 
     private Double parsePrice(String price) {
 
-        return Double.parseDouble(
-                price
-                        .replace("US$", "")
-                        .replace("&nbsp;", "")
-                        .replace(".", "")
-                        .replace(",", ".")
-                        .trim()
-        );
+        if (price == null || price.isBlank()) {
+            return 0.0;
+        }
+
+        String cleanPrice = price
+                .replace("US$", "")
+                .replace("R$", "")
+                .replace("\u00A0", "")
+                .replace(".", "")
+                .replace(",", ".")
+                .replace("\n", "")
+                .trim();
+
+        System.out.println("Preço limpo: " + cleanPrice);
+
+        return Double.parseDouble(cleanPrice);
     }
 }
