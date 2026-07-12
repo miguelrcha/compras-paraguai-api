@@ -1,0 +1,43 @@
+name: Daily Product Monitor
+
+on:
+  schedule:
+    # 09:00 America/Sao_Paulo (UTC-3, sem horário de verão) = 12:00 UTC
+    - cron: "0 12 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start containers
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: docker compose up --build -d
+
+      - name: Wait for app to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf "http://localhost:8080/api/products?name=test&limit=1" >/dev/null; then
+              echo "App is up"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "App did not become ready in time"
+          exit 1
+
+      - name: Trigger monitor (scraping + envio Telegram)
+        run: curl -sf http://localhost:8080/api/products/monitor
+
+      - name: Show app logs
+        if: always()
+        run: docker compose logs app --tail 150
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down

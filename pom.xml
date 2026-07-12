@@ -11,21 +11,14 @@
 	<groupId>com.miguelrcha</groupId>
 	<artifactId>scraping-paraguai</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
+	<name>scraping-paraguai</name>
+	<description>API de monitoramento e comparação de preços de produtos em lojas do Paraguai</description>
 	<licenses>
-		<license/>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+		</license>
 	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
