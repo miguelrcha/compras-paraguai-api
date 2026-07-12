@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * Lista fixa de produtos monitorados diariamente por {@link com.miguelrcha.scraping_paraguai.scheduler.ProductScheduler}.
+ */
 @Configuration
 @Getter
 public class ProductConfig {
