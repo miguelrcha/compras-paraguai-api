@@ -22,11 +22,12 @@ jobs:
       - name: Wait for app to be ready
         run: |
           for i in $(seq 1 30); do
-            if curl -sf "http://localhost:8080/api/products?name=test&limit=1" >/dev/null; then
+            if (exec 3<>/dev/tcp/localhost/8080) 2>/dev/null; then
+              exec 3>&- 3<&-
               echo "App is up"
               exit 0
             fi
-            sleep 3
+            sleep 2
           done
           echo "App did not become ready in time"
           exit 1
