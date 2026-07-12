@@ -22,7 +22,7 @@ jobs:
       - name: Wait for app to be ready
         run: |
           for i in $(seq 1 30); do
-            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 http://localhost:8080/api/products)
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 http://localhost:8080/api/products || echo "000")
             if [ "$code" != "000" ]; then
               echo "App is up (HTTP $code)"
               exit 0
