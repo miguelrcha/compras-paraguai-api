@@ -1,9 +1,11 @@
 name: Daily Product Monitor
 
+# Agendamento automático desativado: comprasparaguai.com.br bloqueia (403)
+# requisições vindas de IPs de datacenter/nuvem, incluindo os runners do
+# GitHub Actions. Por enquanto o monitoramento diário roda localmente
+# (veja o README). Mantido como workflow_dispatch para testes manuais
+# ou para reativar caso um proxy residencial seja adicionado.
 on:
-  schedule:
-    # 09:00 America/Sao_Paulo (UTC-3, sem horário de verão) = 12:00 UTC
-    - cron: "0 12 * * *"
   workflow_dispatch: {}
 
 jobs:

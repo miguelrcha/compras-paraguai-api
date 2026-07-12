@@ -52,15 +52,16 @@ As mesmas variáveis de ambiente da tabela acima podem ser exportadas antes de r
 - `GET /api/products/monitor` — dispara o monitoramento manualmente.
 - `GET /api/products/telegram-test` — testa o envio de mensagem no Telegram.
 
-## Envio diário automático (GitHub Actions)
+## Envio diário automático
 
-O workflow `.github/workflows/daily-monitor.yml` roda todo dia às 9h (América/São Paulo), sobe os containers, chama `/api/products/monitor` e desliga tudo em seguida. Não precisa de servidor nem de rodar Docker manualmente — o próprio GitHub executa.
+O `comprasparaguai.com.br` bloqueia (HTTP 403) requisições vindas de IPs de datacenter/nuvem — inclusive dos runners do GitHub Actions — então o agendamento automático **precisa rodar de um IP residencial** (seu computador, por exemplo), não de um serviço de nuvem convencional.
 
-Para funcionar, cadastre os secrets do repositório (**Settings → Secrets and variables → Actions → New repository secret**):
+Por enquanto, o jeito de garantir a mensagem diária às 9h (o cron interno já está configurado em `ProductScheduler`) é deixar o container rodando continuamente:
 
-| Secret              | Valor                          |
-|---------------------|----------------------------------|
-| `TELEGRAM_TOKEN`    | Token do bot (via @BotFather)    |
-| `TELEGRAM_CHAT_ID`  | Chat ID de destino das mensagens |
+```bash
+docker compose up -d
+```
 
-Para testar sem esperar o horário agendado, vá em **Actions → Daily Product Monitor → Run workflow** (disparo manual via `workflow_dispatch`).
+O `restart: unless-stopped` no `docker-compose.yml` garante que ele volta a subir sozinho se o Docker Desktop reiniciar — mas o computador precisa estar ligado e com o Docker ativo no horário. Vale configurar o Docker Desktop para iniciar junto com o sistema.
+
+Existe um workflow em `.github/workflows/daily-monitor.yml` (desativado do agendamento automático, só roda manualmente via `Actions → Daily Product Monitor → Run workflow`) caso no futuro seja adicionado um proxy residencial — aí o agendamento automático na nuvem volta a ser viável.
