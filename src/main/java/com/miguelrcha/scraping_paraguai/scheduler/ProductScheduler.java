@@ -78,11 +78,6 @@ public class ProductScheduler {
                 message.toString()
         );
 
-        telegramNotificationService.sendPhoto(
-                "https://i.postimg.cc/xxxx/banner.png",
-                message.toString()
-        );
-
         log.info("Monitoramento finalizado.");
     }
 
