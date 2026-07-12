@@ -52,6 +52,15 @@ As mesmas variáveis de ambiente da tabela acima podem ser exportadas antes de r
 - `GET /api/products/monitor` — dispara o monitoramento manualmente.
 - `GET /api/products/telegram-test` — testa o envio de mensagem no Telegram.
 
+## Documentação da API (Swagger / OpenAPI)
+
+A API é documentada com [springdoc-openapi](https://springdoc.org/). Com a aplicação rodando:
+
+- **Swagger UI** (interativo, permite testar os endpoints pelo navegador): `http://localhost:8080/swagger-ui.html`
+- **Spec OpenAPI (JSON)**: `http://localhost:8080/v3/api-docs`
+
+Os endpoints, parâmetros e schemas (`ProductDTO`, `CurrencyType`) estão anotados diretamente no código (`@Operation`, `@Parameter`, `@Schema`), então a documentação exibida na Swagger UI sempre reflete os controllers atuais.
+
 ## Envio diário automático
 
 O `comprasparaguai.com.br` bloqueia (HTTP 403) requisições vindas de IPs de datacenter/nuvem — inclusive dos runners do GitHub Actions — então o agendamento automático **precisa rodar de um IP residencial** (seu computador, por exemplo), não de um serviço de nuvem convencional.

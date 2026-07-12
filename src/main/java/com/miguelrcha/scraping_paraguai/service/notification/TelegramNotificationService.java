@@ -7,6 +7,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Envia mensagens e fotos para um chat do Telegram via Bot API, usando o token e chat ID
+ * configurados em {@code telegram.token} / {@code telegram.chat-id}.
+ */
 @Service
 public class TelegramNotificationService {
 
@@ -19,6 +23,11 @@ public class TelegramNotificationService {
     private final RestTemplate restTemplate =
             new RestTemplate();
 
+    /**
+     * Envia uma mensagem de texto para o chat configurado.
+     *
+     * @param message texto da mensagem
+     */
     public void sendMessage(String message) {
 
         String url =
@@ -39,6 +48,12 @@ public class TelegramNotificationService {
         );
     }
 
+    /**
+     * Envia uma foto (por URL) com legenda para o chat configurado.
+     *
+     * @param imageUrl URL pública da imagem
+     * @param caption  legenda da foto
+     */
     public void sendPhoto(
             String imageUrl,
             String caption

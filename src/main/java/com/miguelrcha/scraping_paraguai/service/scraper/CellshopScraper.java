@@ -11,12 +11,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Scraper que raspa a página de busca de comprasparaguai.com.br (loja "Compras Paraguai")
+ * via Jsoup, extraindo nome e preços (USD/BRL) de cada item listado.
+ */
 @Component
 public class CellshopScraper implements ProductScraper {
 
     private static final String BASE_URL =
             "https://www.comprasparaguai.com.br/busca/?q=";
 
+    /**
+     * Busca produtos na página de resultados de comprasparaguai.com.br para o termo informado.
+     *
+     * @param productName termo de busca do produto
+     * @return produtos encontrados na página de resultados
+     * @throws RuntimeException se a requisição HTTP para a loja falhar
+     */
     @Override
     public List<ProductDTO> search(String productName) {
 
@@ -68,6 +79,10 @@ public class CellshopScraper implements ProductScraper {
         return products;
     }
 
+    /**
+     * Converte um preço formatado (ex: "US$ 1.234,56") em {@link Double}, removendo
+     * símbolos de moeda e ajustando separadores de milhar/decimal para o padrão pt-BR.
+     */
     private Double parsePrice(String price) {
 
         if (price == null || price.isBlank()) {

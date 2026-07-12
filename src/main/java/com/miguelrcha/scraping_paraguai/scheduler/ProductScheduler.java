@@ -12,6 +12,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Rotina agendada (e disparável manualmente via {@code GET /api/products/monitor}) que
+ * busca os produtos configurados em {@link ProductConfig}, monta um resumo de preços
+ * e envia via Telegram.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -21,6 +26,12 @@ public class ProductScheduler {
     private final ProductConfig productConfig;
     private final TelegramNotificationService telegramNotificationService;
 
+    /**
+     * Executa, para cada produto configurado em {@link ProductConfig}, uma busca (até 30
+     * resultados em USD, filtrados por relevância e limitados aos 5 primeiros), monta uma
+     * mensagem de resumo e a envia por Telegram como texto e como foto com legenda.
+     * Roda todo dia às 9h (horário de São Paulo).
+     */
     @Scheduled(cron = "0 0 9 * * *", zone = "America/Sao_Paulo")
     public void monitorProducts() {
 
@@ -81,6 +92,11 @@ public class ProductScheduler {
         log.info("Monitoramento finalizado.");
     }
 
+    /**
+     * Filtra falsos positivos do scraper checando se o nome do produto encontrado condiz
+     * com o termo buscado, usando sinônimos manuais para os termos mais ambíguos
+     * (ex: "ps5" -> "playstation 5").
+     */
     private boolean isRelevantProduct(
             String search,
             String productName
